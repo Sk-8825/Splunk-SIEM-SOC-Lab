@@ -25,7 +25,16 @@ An end-to-end Security Operations Center (SOC) home lab simulation modeling acti
 ## 📊 Live Splunk SIEM Monitoring Studio Dashboard
 Below is the operational production monitoring view built dynamically to map the lab's network footprint:
 
-![Security Monitoring Center Dashboard](dashboard_snapshot.png)
+### Executive Security Analytics Overview
+![Executive Dashboard View](Screenshot%20(1).png)
+
+### Security Incident Activity Trends
+![Activity Trends Graph](Screenshot%20(2).png)
+
+### Ingestion Metrics & Log Volumetrics
+![Log Volumetrics Tracker](Screenshot%20(3).png)
+
+
 
 ### 📈 Panel Insights & Metrics Tracked:
 *   **Total Logs Ingested:** Tracks total event volume hitting our monitoring pipelines in real-time.
