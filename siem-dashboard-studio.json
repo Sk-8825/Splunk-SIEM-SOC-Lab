@@ -1,0 +1,244 @@
+{
+    "title": "SOC Security Information & Event Management (SIEM) Dashboard",
+    "description": "",
+    "inputs": {
+        "input_global_trp": {
+            "options": {
+                "defaultValue": "-24h@h,now",
+                "token": "global_time"
+            },
+            "title": "Global Time Range",
+            "type": "input.timerange"
+        }
+    },
+    "defaults": {
+        "dataSources": {
+            "ds.search": {
+                "options": {
+                    "queryParameters": {
+                        "earliest": "$global_time.earliest$",
+                        "latest": "$global_time.latest$"
+                    }
+                }
+            },
+            "ds.spl2": {
+                "options": {
+                    "queryParameters": {
+                        "earliest": "$global_time.earliest$",
+                        "latest": "$global_time.latest$"
+                    }
+                }
+            }
+        },
+        "visualizations": {
+            "global": {
+                "showProgressBar": true
+            }
+        }
+    },
+    "visualizations": {
+        "viz_ID0BXl3B": {
+            "dataSources": {
+                "primary": "ds_MVv38D0p"
+            },
+            "options": {
+                "dataValuesDisplay": "off",
+                "legendDisplay": "right",
+                "legendTruncation": "ellipsisMiddle",
+                "showIndependentYRanges": false,
+                "showRoundedY2AxisLabels": false,
+                "showSplitSeries": false,
+                "showY2MajorGridLines": true,
+                "stackMode": "auto",
+                "xAxisTitleVisibility": "show",
+                "y2AxisAbbreviation": "auto",
+                "y2AxisTitleVisibility": "show",
+                "yAxisAbbreviation": "auto",
+                "yAxisScale": "linear",
+                "yAxisTitleVisibility": "show"
+            },
+            "title": "Authentication Security Overview",
+            "type": "splunk.bar"
+        },
+        "viz_ROXBssPE": {
+            "containerOptions": {},
+            "dataSources": {
+                "primary": "ds_dlSKHjHW"
+            },
+            "showLastUpdated": false,
+            "showProgressBar": true,
+            "title": "Total Authentication Balance",
+            "type": "splunk.pie"
+        },
+        "viz_iTqGPhJy": {
+            "containerOptions": {},
+            "context": {},
+            "dataSources": {
+                "primary": "ds_QVElLdJq"
+            },
+            "options": {},
+            "showLastUpdated": false,
+            "showProgressBar": true,
+            "title": "Total Security Logs Ingested (24h)",
+            "type": "splunk.singlevalue"
+        },
+        "viz_qZtAxDDj": {
+            "dataSources": {
+                "primary": "ds_CnedpRlp"
+            },
+            "options": {
+                "dataValuesDisplay": "off",
+                "legendDisplay": "right",
+                "legendTruncation": "ellipsisMiddle",
+                "showIndependentYRanges": false,
+                "showOverlayY2Axis": false,
+                "showRoundedY2AxisLabels": false,
+                "showSplitSeries": false,
+                "showY2MajorGridLines": true,
+                "stackMode": "auto",
+                "xAxisLabelRotation": 0,
+                "xAxisTitleVisibility": "show",
+                "y2AxisAbbreviation": "auto",
+                "y2AxisScale": "linear",
+                "y2AxisTitleVisibility": "show",
+                "yAxisAbbreviation": "auto",
+                "yAxisScale": "linear",
+                "yAxisTitleVisibility": "show"
+            },
+            "title": "Enterprise Security Event Trends (24h)",
+            "type": "splunk.column"
+        }
+    },
+    "dataSources": {
+        "ds_CnedpRlp": {
+            "name": "Enterprise Security Event Trends _24h_ search",
+            "options": {
+                "query": "index=\"main\" sourcetype=\"WinEventLog:Security\" | timechart count by EventCode",
+                "queryParameters": {
+                    "earliest": "-24h@h",
+                    "latest": "now",
+                    "sampleRatio": 1
+                }
+            },
+            "type": "ds.search"
+        },
+        "ds_Dh6KflrA": {
+            "name": "Live Authentication Activity Logs search",
+            "options": {
+                "query": "index=\"main\" sourcetype=\"WinEventLog:Security\" ( EventCode=4624 OR EventCode=4625) | stats count by ComputerName, TargetUserName, EventCode",
+                "queryParameters": {
+                    "earliest": "-24h@h",
+                    "latest": "now",
+                    "sampleRatio": 1
+                }
+            },
+            "type": "ds.search"
+        },
+        "ds_MVv38D0p": {
+            "name": "Authentication Security Overview search",
+            "options": {
+                "query": "index=\"main\" sourcetype=\"WinEventLog:Security\" ( EventCode=4624 OR EventCode=4625) | top limit=10 EventCode",
+                "queryParameters": {
+                    "earliest": "-24h@h",
+                    "latest": "now",
+                    "sampleRatio": 1
+                }
+            },
+            "type": "ds.search"
+        },
+        "ds_QVElLdJq": {
+            "name": "Total Security Logs Ingested _24h_ search",
+            "options": {
+                "query": "index=\"main\" sourcetype=\"WinEventLog:Security\" | stats count",
+                "queryParameters": {
+                    "earliest": "-24h@h",
+                    "latest": "now",
+                    "sampleRatio": 1
+                }
+            },
+            "type": "ds.search"
+        },
+        "ds_dlSKHjHW": {
+            "name": "High-Risk Authentication Failure Logs - Pie chart search",
+            "options": {
+                "query": "index=\"main\" (EventCode=4624 OR EventCode=4625) | eval Status=if(EventCode=4624,\"Successful Login\",\"Failed Login Attempt \") | stats count by Status",
+                "queryParameters": {
+                    "earliest": "-60m@m",
+                    "latest": "now",
+                    "sampleRatio": 1
+                }
+            },
+            "type": "ds.search"
+        }
+    },
+    "layout": {
+        "globalInputs": [
+            "input_global_trp"
+        ],
+        "layoutDefinitions": {
+            "layout_1": {
+                "options": {
+                    "display": "auto",
+                    "height": 960,
+                    "width": 1440
+                },
+                "structure": [
+                    {
+                        "item": "viz_ROXBssPE",
+                        "position": {
+                            "h": 250,
+                            "w": 800,
+                            "x": 0,
+                            "y": -10
+                        },
+                        "type": "block"
+                    },
+                    {
+                        "item": "viz_qZtAxDDj",
+                        "position": {
+                            "h": 420,
+                            "w": 1440,
+                            "x": 0,
+                            "y": 230
+                        },
+                        "type": "block"
+                    },
+                    {
+                        "item": "viz_iTqGPhJy",
+                        "position": {
+                            "h": 240,
+                            "w": 640,
+                            "x": 800,
+                            "y": -10
+                        },
+                        "type": "block"
+                    },
+                    {
+                        "item": "viz_ID0BXl3B",
+                        "position": {
+                            "h": 310,
+                            "w": 1440,
+                            "x": 0,
+                            "y": 650
+                        },
+                        "type": "block"
+                    }
+                ],
+                "type": "absolute"
+            }
+        },
+        "options": {},
+        "tabs": {
+            "items": [
+                {
+                    "label": "New tab",
+                    "layoutId": "layout_1"
+                }
+            ]
+        }
+    },
+    "applicationProperties": {
+        "hideEdit": false,
+        "hideExport": false
+    }
+}
